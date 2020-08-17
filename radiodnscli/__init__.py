@@ -36,6 +36,7 @@ def si(source, **kwargs):
 def parse_si(url, **kwargs):
     resolved_auth_fqdn = kwargs.get('resolved_auth_fqdn')
     remove_non_authoritative_bearers = kwargs.get('remove_non_authoritative_bearers', False)
+    remove_non_authoritative_services = kwargs.get('remove_non_authoritative_services', False)
 
     response = http.request('GET', url)
     if response.status != 200:
@@ -45,14 +46,21 @@ def parse_si(url, **kwargs):
     root = ET.fromstring(response.data)
     ET.register_namespace('', SPI_NAMESPACE)
 
-    if remove_non_authoritative_bearers:
+    if remove_non_authoritative_bearers or remove_non_authoritative_services:
         host = urlparse(url).netloc
 
-        for service in root.iter('{{{namespace}}}service'.format(namespace=SPI_NAMESPACE)):
+        services = root.find('{{{namespace}}}services'.format(namespace=SPI_NAMESPACE))
+
+        for service in services.iter('{{{namespace}}}service'.format(namespace=SPI_NAMESPACE)):
+            original_num_broadcast_bearers = 0
+            final_num_broadcast_bearers = 0
+
             for bearer in service.iter('{{{namespace}}}bearer'.format(namespace=SPI_NAMESPACE)):
                 bearer_uri = bearer.attrib['id'].lower()
                 if urlparse(bearer_uri).scheme not in BROADCAST_SCHEMES:
                     continue
+
+                original_num_broadcast_bearers += 1
 
                 try:
                     auth_fqdn = resolve_bearer_uri(bearer_uri)
@@ -90,8 +98,13 @@ def parse_si(url, **kwargs):
                         service.remove(bearer)
                         continue
 
-            # if len(service.findall('{{{namespace}}}bearer')) == 0:
-            #     print 
+                final_num_broadcast_bearers += 1
+
+            if original_num_broadcast_bearers > 0 and final_num_broadcast_bearers == 0:
+                name = get_service_name(service)
+                print('service {service} had all broadcast bearers removed, removing service'.format(service=name),
+                      file=sys.stderr)
+                services.remove(service)
 
     xml = ET.tostring(root, encoding='utf8', method='xml')
 
