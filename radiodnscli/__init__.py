@@ -93,7 +93,18 @@ def parse_si(url, **kwargs):
             # if len(service.findall('{{{namespace}}}bearer')) == 0:
             #     print 
 
-    print(ET.tostring(root, encoding='utf8', method='xml'))
+    xml = ET.tostring(root, encoding='utf8', method='xml')
+
+    output_filename = kwargs.get('output')
+    if output_filename:
+        try:
+            file = open(output_filename, 'w')
+            file.write(xml)
+            file.close()
+        except:
+            print('failed writing to file {output_filename}'.format(filename=output_filename))
+    else:
+        print(xml)
 
 def get_service_name(service):
     try:
