@@ -35,7 +35,7 @@ def si(source, **kwargs):
 
 def parse_si(url, **kwargs):
     resolved_auth_fqdn = kwargs.get('resolved_auth_fqdn')
-    remove_unauthoritative_bearers = kwargs.get('remove_unauthoritative_bearers', False)
+    remove_non_authoritative_bearers = kwargs.get('remove_non_authoritative_bearers', False)
 
     response = http.request('GET', url)
     if response.status != 200:
@@ -45,7 +45,7 @@ def parse_si(url, **kwargs):
     root = ET.fromstring(response.data)
     ET.register_namespace('', SPI_NAMESPACE)
 
-    if remove_unauthoritative_bearers:
+    if remove_non_authoritative_bearers:
         host = urlparse(url).netloc
 
         for service in root.iter('{{{namespace}}}service'.format(namespace=SPI_NAMESPACE)):

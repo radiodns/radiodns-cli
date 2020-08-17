@@ -4,7 +4,7 @@ import radiodnscli
 import sys
 
 def si(args):
-    radiodnscli.si(args.source, remove_unauthoritative_bearers=args.remove_unauthoritative_bearers, output=args.output)
+    radiodnscli.si(args.source, remove_non_authoritative_bearers=args.remove_non_authoritative_bearers, output=args.output)
 
 parser = argparse.ArgumentParser()
 parser_commands = parser.add_subparsers()
@@ -15,7 +15,7 @@ parser_spi_commands = parser_spi.add_subparsers()
 parser_si = parser_spi_commands.add_parser('si')
 parser_si.add_argument('source')
 parser_si.add_argument('-o', '--output', help='Write to file instead of stdout')
-parser_si.add_argument('--remove-unauthoritative-bearers', action='store_true', help='Remove all bearer elements where the URI does not resolve back to the same document')
+parser_si.add_argument('--remove-non-authoritative-bearers', action='store_true', help='Remove all bearer elements where the URI does not resolve back to the same document')
 parser_si.set_defaults(func=si)
 
 args = parser.parse_args(sys.argv[1:])
