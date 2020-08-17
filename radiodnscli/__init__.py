@@ -67,7 +67,7 @@ def parse_si(url, **kwargs):
                 except Exception:
                     # TODO: this should be more specific about what Exceptions are acceptable
                     name = get_service_name(service)
-                    print('failed resolving {bearer} ({service}) in {url}'.format(bearer=bearer_uri,
+                    print(u'failed resolving {bearer} ({service}) in {url}'.format(bearer=bearer_uri,
                                                                                   service=name,
                                                                                   url=url),
                           file=sys.stderr)
@@ -77,7 +77,7 @@ def parse_si(url, **kwargs):
                 if resolved_auth_fqdn:
                     if auth_fqdn != resolved_auth_fqdn:
                         name = get_service_name(service)
-                        print('{actual} != {expected} for {bearer} ({service}) in {url}'.format(actual=auth_fqdn,
+                        print(u'{actual} != {expected} for {bearer} ({service}) in {url}'.format(actual=auth_fqdn,
                                                                                                 expected=resolved_auth_fqdn,
                                                                                                 bearer=bearer_uri,
                                                                                                 service=name, url=url),
@@ -89,7 +89,7 @@ def parse_si(url, **kwargs):
                     hosts = resolve_application(auth_fqdn, SPI_APP_LEGACY)
                     if host not in hosts:
                         name = get_service_name(service)
-                        print('{actual} not in {expected} for {bearer} ({service}) in {url}'.format(actual=host,
+                        print(u'{actual} not in {expected} for {bearer} ({service}) in {url}'.format(actual=host,
                                                                                                     expected=hosts,
                                                                                                     bearer=bearer_uri,
                                                                                                     service=name,
@@ -102,7 +102,7 @@ def parse_si(url, **kwargs):
 
             if original_num_broadcast_bearers > 0 and final_num_broadcast_bearers == 0:
                 name = get_service_name(service)
-                print('service {service} had all broadcast bearers removed, removing service'.format(service=name),
+                print(u'service {service} had all broadcast bearers removed, removing service'.format(service=name),
                       file=sys.stderr)
                 services.remove(service)
 
