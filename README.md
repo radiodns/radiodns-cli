@@ -6,3 +6,9 @@ applications of RadioDNS Hybrid Radio.
 It's currently considered an "alpha" release and only has basic support for
 parsing SPI SI files. In future the project aims to provide more useful
 functionality for all areas of RadioDNS functionality.
+
+Use
+```
+radiodnscli --help
+```
+to get further information on functionality and syntax for commands
