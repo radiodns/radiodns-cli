@@ -9,6 +9,6 @@ functionality for all areas of RadioDNS functionality.
 
 Use
 ```
-radiodnscli --help
+radiodns --help
 ```
 to get further information on functionality and syntax for commands
