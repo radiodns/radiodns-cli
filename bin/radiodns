@@ -21,5 +21,11 @@ parser_si.add_argument('--remove-non-authoritative-bearers', action='store_true'
 parser_si.add_argument('--remove-non-authoritative-services', action='store_true', help='Remove all service elements where no broadcast bearers are deemed authoritative')
 parser_si.set_defaults(func=si)
 
-args = parser.parse_args(sys.argv[1:])
+args = parser.parse_args()
+try:
+    getattr(args, 'func')
+except AttributeError:
+    parser.print_help()
+    sys.exit(0)
+
 args.func(args)
